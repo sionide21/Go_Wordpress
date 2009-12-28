@@ -18,12 +18,12 @@ func (b *Blog) GetTags() ([]Tag, os.Error) {
 	for i, unCastV := range tags {
 		v := unCastV.(xmlrpc.StructValue)
 		t := Tag{}
-		t.Id = v.GetInt("tagId")
+		t.Id = getInt(v, "tag_id")
 		t.Name = v.GetString("name")
-		t.Count = v.GetInt("count")
+		t.Count = getInt(v, "count")
 		t.Slug = v.GetString("slug")
-		t.HTML_URL = v.GetString("htmlUrl")
-		t.RSS_URL = v.GetString("rssUrl")
+		t.HTML_URL = v.GetString("html_url")
+		t.RSS_URL = v.GetString("rss_url")
 		list[i] = t
 	}
 	return list, nil

@@ -8,6 +8,7 @@ TARG=wordpress
 GOFILES=\
     common.go\
     blog.go\
+    hacks.go\
     
 
 include $(GOROOT)/src/Make.pkg

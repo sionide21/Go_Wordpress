@@ -3,7 +3,6 @@ package wordpress
 import (
 	"xmlrpc"
 	"os"
-	"strconv"
 )
 
 type session struct {
@@ -42,7 +41,7 @@ func GetUsersBlogs(url, username, password string) ([]Blog, os.Error) {
 	for i, unCast := range res {
 		v := unCast.(xmlrpc.StructValue)
 		b := Blog{}
-		b.Id, _ = strconv.Atoi(v.GetString("blogid")) // WTF wordpress, why is this a string?
+		b.Id = getInt(v, "blogid") // WTF wordpress, why is this a string?
 		b.Session = session{username, password}
 		b.XMLRPC = v.GetString("xmlrpc")
 		b.IsAdmin = v.GetBoolean("isAdmin")
