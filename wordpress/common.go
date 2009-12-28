@@ -28,6 +28,18 @@ type Tag struct {
 	RSS_URL  string
 }
 
+type CommentCount struct {
+	Approved           int
+	AwaitingModeration int
+	Spam               int
+	Total              int
+}
+
+type PageTemplate struct {
+	Name        string
+	Description string
+}
+
 func GetUsersBlogs(url, username, password string) ([]Blog, os.Error) {
 	getBlogs := xmlrpc.RemoteMethod{
 		Endpoint: url,
