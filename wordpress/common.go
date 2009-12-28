@@ -40,6 +40,13 @@ type PageTemplate struct {
 	Description string
 }
 
+type Option struct {
+	Name     string
+	Desc     string
+	ReadOnly bool
+	Value    string
+}
+
 func GetUsersBlogs(url, username, password string) ([]Blog, os.Error) {
 	getBlogs := xmlrpc.RemoteMethod{
 		Endpoint: url,

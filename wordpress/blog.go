@@ -53,13 +53,43 @@ func (b *Blog) GetPageTemplates() ([]PageTemplate, os.Error) {
 		return nil, err
 	}
 	list := make([]PageTemplate, len(templates))
-    i := 0
+	i := 0
 	for name := range templates {
 		list[i] = PageTemplate{
 			Name: name,
 			Description: templates.GetString(name),
 		}
-        i++
+		i++
 	}
 	return list, nil
+}
+
+func parseOptions(opts xmlrpc.StructValue, err os.Error) (map[string]Option, os.Error) {
+	if err != nil {
+		return nil, err
+	}
+	m := make(map[string]Option, len(opts))
+	for name := range opts {
+		opt := opts.GetStruct(name)
+		m[name] = Option{
+			Name: name,
+			ReadOnly: opt.GetBoolean("readonly"),
+			Desc: opt.GetString("desc"),
+			Value: opt.GetRaw("value").String(), // Wordpress has a very bad xmlrpc impl. This is a necessary evil
+		}
+	}
+	return m, nil
+}
+
+func (b *Blog) GetOptions(options ...) (map[string]Option, os.Error) {
+	// By calling params manually we get an array of options as one param instaed of each option as a param
+	return parseOptions(b.method("wp.getOptions").CallStruct(xmlrpc.Params(options)))
+}
+
+func (b *Blog) SetOptions(options map[string]string) (map[string]Option, os.Error) {
+	return parseOptions(b.method("wp.setOptions").CallStruct(options))
+}
+
+func (b *Blog) SetOption(opt, val string) (map[string]Option, os.Error) {
+	return b.SetOptions(map[string]string{opt: val})
 }
