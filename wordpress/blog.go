@@ -93,3 +93,7 @@ func (b *Blog) SetOptions(options map[string]string) (map[string]Option, os.Erro
 func (b *Blog) SetOption(opt, val string) (map[string]Option, os.Error) {
 	return b.SetOptions(map[string]string{opt: val})
 }
+
+func (b *Blog) DeleteComment(id int) (bool, os.Error) {
+	return b.method("wp.deleteComment").CallBoolean(id)
+}
